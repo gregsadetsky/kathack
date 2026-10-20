@@ -9,7 +9,6 @@ changes vs the original (untouched files in `0.original/`):
 - bookmarklet urls are built from wherever the page is served instead of hard-coded http urls
 - `kh.js` derives its own base url (for the mp3 and the popup link) from its script tag
 - default control is left-click instead of right-click
-- new "arrow keys" control option (page scrolls to follow the ball)
 - google analytics snippet removed
 - footer line added
 

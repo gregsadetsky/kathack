@@ -338,7 +338,6 @@ function PlayerBall(parentNode, stickyNodes, ballOpts, sounds) {
         
         accelTargetX = 0, accelTargetY = 0,
         accel = false,
-        keyX = 0, keyY = 0, /* arrow key direction, -1/0/1 each. */
         
         VOL_MULT = ballOpts.VOL_MULT,
         MAX_ATTACHED_VISIBLE = ballOpts.MAX_ATTACHED_VISIBLE,
@@ -430,31 +429,6 @@ function PlayerBall(parentNode, stickyNodes, ballOpts, sounds) {
         accelTargetY = ty;
     };
 
-    this.setKeyDir = function (kx, ky) {
-        keyX = kx;
-        keyY = ky;
-    };
-
-    /* keep the ball on screen when steering with the keyboard. */
-    function scrollToBall() {
-        var sx = window.pageXOffset, sy = window.pageYOffset,
-            vw = window.innerWidth, vh = window.innerHeight,
-            margin = radius + 60, nx = sx, ny = sy;
-        if (x - margin < sx) {
-            nx = x - margin;
-        } else if (x + margin > sx + vw) {
-            nx = x + margin - vw;
-        }
-        if (y - margin < sy) {
-            ny = y - margin;
-        } else if (y + margin > sy + vh) {
-            ny = y + margin - vh;
-        }
-        if (nx !== sx || ny !== sy) {
-            window.scrollTo(nx, ny);
-        }
-    }
-    
     function getVol() {
         return (4 * Math.PI * radius * radius * radius / 3);
     }
@@ -527,11 +501,7 @@ function PlayerBall(parentNode, stickyNodes, ballOpts, sounds) {
         var oldX = x, oldY = y, dx, dy,
             bounce = false,
             accelTh;
-        if (keyX !== 0 || keyY !== 0) {
-            accelTh = Math.atan2(keyY, keyX);
-            vx += Math.cos(accelTh) * 0.5;
-            vy += Math.sin(accelTh) * 0.5;
-        } else if (accel) {
+        if (accel) {
             accelTh = Math.atan2(accelTargetY - y, accelTargetX - x);
             vx += Math.cos(accelTh) * 0.5;
             vy += Math.sin(accelTh) * 0.5;
@@ -568,9 +538,6 @@ function PlayerBall(parentNode, stickyNodes, ballOpts, sounds) {
             phi -= Math.sqrt(dx * dx + dy * dy) / radius;
         }
         stickyNodes.removeIntersecting(x, y, radius, removeIntCb);
-        if (keyX !== 0 || keyY !== 0) {
-            scrollToBall();
-        }
         this.draw();
         if (bounce && sounds) {
             sounds.play_bounce();
@@ -720,41 +687,7 @@ function Game(gameDiv, stickyNodes, ballOpts) {
         }
     }, true);
     
-    if (ballOpts.MOUSEB === -6) {
-        /* arrow keys */
-        (function () {
-            var keys = {37: [-1, 0], 38: [0, -1], 39: [1, 0], 40: [0, 1]},
-                down = {};
-            function update() {
-                var k, kx = 0, ky = 0;
-                for (k in down) {
-                    if (down[k]) {
-                        kx += keys[k][0];
-                        ky += keys[k][1];
-                    }
-                }
-                player1.setKeyDir(kx, ky);
-            }
-            document.addEventListener('keydown', function (event) {
-                if (keys[event.keyCode]) {
-                    down[event.keyCode] = true;
-                    update();
-                    return preventDefault(event);
-                }
-            }, true);
-            document.addEventListener('keyup', function (event) {
-                if (keys[event.keyCode]) {
-                    down[event.keyCode] = false;
-                    update();
-                    return preventDefault(event);
-                }
-            }, true);
-            window.addEventListener('blur', function () {
-                down = {};
-                update();
-            }, true);
-        }());
-    } else if (ballOpts.MOUSEB !== -5) {
+    if (ballOpts.MOUSEB !== -5) {
         /* mouse buttons */
         document.addEventListener('mousemove', function (event) {
             player1.setAccelTarget(event.pageX, event.pageY);
@@ -841,7 +774,6 @@ Katamari!</a></h1>\
 <p>Controls: Hold down <b><select id="mouseb">\
 <option value="0" selected="selected">Left-Click</option>\
 <option value="2">Right-Click</option>\
-<option value="-6">Arrow Keys</option>\
 <option value="-5">Touch</option>\
 </select></b> to control the ball!</p>\
 <div><label>Background Music? \

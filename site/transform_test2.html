@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+		<title>Transform Test2</title>
+        <script type="text/javascript">window.noMain = 1;</script>
+        <script type="text/javascript" src="js/kh.js"></script>
+        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+        <script type="text/javascript">
+        /*<![CDATA[*//*---->*/
+var runningBalls = [], physicsInterval = null, phi = 0;
+
+function makeTest(bx, by, br, bth, rleft, rtop, rwidth, rheight) {
+    var stickyNodes, ball, ballOpts, n;
+    n = $('<div></div>').text("KITTEH").css({
+        position: "absolute",
+        left: rleft + "px",
+        top: rtop + "px",
+        width: rwidth + "px",
+        height: rheight + "px",
+    }).appendTo("#words")[0];
+    stickyNodes = new StickyNodes();
+    stickyNodes.addDomNode(n);
+    stickyNodes.finalize(0, 0);
+    ballOpts = {
+        color: '#7D26CD',
+        VOL_MULT: 0.5,
+        MAX_ATTACHED_VISIBLE: 100,
+        CHECK_VOLS: false,
+        MOUSEB: 2,
+    };
+    ball = new PlayerBall($("#gameDiv")[0], stickyNodes, ballOpts, false);
+    ball.init();
+    ball.setDocSize(10000, 10000);
+    ball.setXY(bx, by);
+    ball.setRadius(br);
+    ball.setTh(bth);
+    ball.updatePhysics();
+    runningBalls.push(ball);
+}
+
+function physicsTick(noPhi) {
+    var i;
+    if (!noPhi) {
+        phi -= Math.PI / 128;
+    }
+    for (i = 0; i < runningBalls.length; i++) {
+        runningBalls[i].setPhi(phi);
+        runningBalls[i].updatePhysics();
+    }
+}
+
+$(function () {
+    var startEl = $('#start'), stopEl = $('#stop');
+    makeTest(100, 100, 20, 0,                100 + 20, 90, 60, 20);
+    makeTest(250, 100, 20, Math.PI / 8,      250 + 20, 90, 60, 20);
+    makeTest(400, 100, 20, Math.PI / 4,      400 + 20, 90, 60, 20);
+    makeTest(550, 100, 20, Math.PI * 3 / 8,  550 + 20, 90, 60, 20);
+    makeTest(700, 100, 20, Math.PI / 2,      700 + 19, 90, 60, 20);
+    
+    makeTest(100, 250, 20, 0,                100 - 60/2, 250 + 20, 60, 20);
+    makeTest(250, 250, 20, Math.PI / 8,      250 - 60/2, 250 + 20, 60, 20);
+    makeTest(400, 250, 20, Math.PI / 4,      400 - 60/2, 250 + 20, 60, 20);
+    makeTest(550, 250, 20, Math.PI * 3 / 8,  550 - 60/2, 250 + 20, 60, 20);
+    makeTest(700, 250, 20, Math.PI / 2,      700 - 60/2, 250 + 20, 60, 20);
+    
+    
+    
+    startEl.click(function () {
+        if (physicsInterval === null) {
+            physicsInterval = setInterval(physicsTick, 25);
+        }
+        startEl.attr('disabled', true);
+        stopEl.attr('disabled', false);
+    });
+    stopEl.click(function () {
+        if (physicsInterval !== null) {
+            clearInterval(physicsInterval);
+            physicsInterval = null;
+        }
+        startEl.attr('disabled', false);
+        stopEl.attr('disabled', true);
+    });
+    $("#sphi").click(function () {
+        stopEl.click();
+        phi = eval($("#phi").val());
+        physicsTick(true);
+        return false;
+    });
+    $("#phi").keydown(function (e) {
+        if (e.keyCode === 13) {
+            $("#sphi").click();
+            return false;
+        }
+    });
+    startEl.click();
+});
+        /*--*//*]]>*/
+        </script>
+	</head>
+	<body style="margin-top: 20px">
+	   <div id="words"></div>
+       <div id="gameDiv"></div>
+       <button id="start">Start</button>
+       <button id="stop">Stop</button><br />
+       <input id="phi" type="text" size="10" value="0" />
+       <button id="sphi">Set phi</button>
+	</body>
+</html>

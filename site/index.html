@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>Katamari Hack</title>
+		<style type="text/css">
+			body {
+				font-family: sans-serif;
+				width: 700px;
+				max-width: calc(100% - 40px);
+				margin: 20px auto;
+			}
+			#footer {
+			    text-align: center;
+			    margin-top: 30px;
+			    color: gray;
+			    font-size: 80%;
+		    }
+		    #footer a {
+		        color: gray;
+		        text-decoration: none;
+	        }
+            h2 {
+                margin-top: 30px;
+            }
+            #tribute {
+                color: gray;
+                font-size: 80%;
+                margin-top: -10px;
+            }
+            #tribute a {
+                color: gray;
+            }
+		</style>
+	</head>
+	<body>
+	    <h1>Katamari Hack</h1>
+	    <p id="tribute">A tribute mirror of <a href="http://kathack.com/" target="_blank">kathack.com</a> (2011),
+	        served over https so the bookmarklet keeps working on today's web.</p>
+		<p>Drag this link to your bookmarks bar: 
+		   <a id="khlink" href="#" title="Katamari!">Katamari!</a>
+		</p>
+        <p>Or copy and paste this url into the location bar on any site:</p>
+        <p>
+            <textarea id="khtext" rows="7" cols="70"></textarea>
+        </p>
+        <p><b>Controls:</b> hold down the <b>right mouse button</b> and move the mouse, the ball rolls
+            toward the pointer. Release to let it coast. (You can pick left-click or touch in the popup
+            before pressing Start.)</p>
+		<h2>What is this?</h2>
+		<p>This is a "bookmarklet" that turns any page into
+		    <a href="https://en.wikipedia.org/wiki/Katamari_Damacy" target="_blank">Katamari Damacy</a>.
+            Try clicking the Katamari! link above.
+	    </p>
+        <p>This was the winner of the 2011 Yahoo HackU contest at
+            University of Washington.</p>
+        <h2>How does it work?</h2>
+        <p>Short version: css transforms (for things stuck to the katamari),
+            canvas (drawing the katamari), and z-index (illusion of depth).</p>
+        <p>Long version: The bookmarklet loads jQuery and <a href="js/kh.js">kh.js</a> into
+            the current page. jQuery is used mostly for <code>.offset()</code> and <code>.css()</code>.
+            &nbsp;kh.js is where all the action happens:
+            <ul>
+                <li>Splits all the text on the page into words/spans.
+                (<code>StickyNodes::addWords</code>)</li>
+                <li>Builds a grid data structure so that intersections with
+                    elements can be found quickly (<code>StickyNodes::finalize</code>).
+                    Essentially <code>grid[floor(x / 100)][floor(y / 100)]</code>
+                    is a list of elements in a 100x100 pixel block.
+                    This should probably be an <a href="https://en.wikipedia.org/wiki/R-tree">R-tree</a>,
+                    but the hot-spot in this program is definitely in the rendering.</li>
+                <li>The ball and stripes are drawn in a canvas that gets moved
+                    around the page (i.e. <code>position: absolute; left: x; top: y;</code>).
+                    See <code>PlayerBall::drawBall</code>.</li>
+                <li>When an element is attached to the katamari, a clone is made.
+                    The original element is hidden.  The new element is moved
+                    around by setting <code>-webkit-transform</code>.
+                    The transform rotates the element about the rolling axis
+                    of the katamari and scales the element to make it look like
+                    it's coming out of the page.
+                    See <code>PlayerBall::drawAttached</code>,
+                    <a href="transform_test.html">transform_test.html</a>, and
+                    <a href="transform_test2.html">transform_test2.html</a>.</li>
+            </ul>
+        </p>
+		<div id="footer">
+		    Created by
+		    <a href="http://students.washington.edu/acleone/" target="_blank">Alex Leone</a>,
+		    David Nufer, and David Truong, March 2011.
+		    <br>Mirror source on <a href="https://github.com/gregsadetsky/kathack" target="_blank">github</a>.
+	    </div>
+		<script type="text/javascript">
+		  /* build the bookmarklet from wherever this page is served, so it
+		     works on https pages (the original pointed at http:// urls, which
+		     browsers now block as mixed content). */
+		  (function () {
+		    var base = location.origin + location.pathname.replace(/[^\/]*$/, ''),
+		        code = "javascript:var i,s,ss=['" + base + "js/kh.js','" + base + "js/jquery-1.5.1.min.js'];" +
+		               "for(i=0;i!=ss.length;i++){s=document.createElement('script');s.src=ss[i];document.body.appendChild(s);}void(0);";
+		    document.getElementById('khlink').href = code;
+		    document.getElementById('khtext').value = code;
+		  }());
+		</script>
+	</body>
+</html>

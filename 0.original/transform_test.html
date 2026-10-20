@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+		<title>Transform Test</title>
+        <style type="text/css">
+            div {
+                width: 100px;
+                border: 1px solid black;
+                display:inline-block;
+            }
+        </style>
+	</head>
+	<body style="margin-top: 200px">
+	   <div style="border: 1px solid green"><div style="-webkit-transform: rotate(30deg);">This is a test</div></div>
+       <div style="border: 1px solid red"><div style="-webkit-transform: rotate(30deg); -webkit-transform-origin: 0% 0%;">This is a test</div></div>
+       <div style="border: 1px solid cyan"><div style="-webkit-transform: rotate(30deg) scaleY(-1); -webkit-transform-origin: 0% 0%;">This is a test</div></div>
+       <div style="border: 1px solid #cc3300"><div style="-webkit-transform: scaleX(1) translate(50px, -50px) rotate(-30deg); -webkit-transform-origin: 0% 0%;">This is a test</div></div>
+       <div style="border: 1px solid #998800"><div style="-webkit-transform: scaleX(0.5) translate(50px, -50px) rotate(-30deg); -webkit-transform-origin: 0% 0%;">This is a test</div></div>
+       <div style="border: 1px solid #33cc00"><div style="-webkit-transform: scaleX(0.1) translate(50px, -50px) rotate(-30deg); -webkit-transform-origin: 0% 0%;">This is a test</div></div>
+       <div style="border: 1px solid #00ff00"><div style="-webkit-transform: scaleX(-0.1) translate(50px, -50px) rotate(-30deg); -webkit-transform-origin: 0% 0%;">This is a test</div></div>
+       <div style="border: 1px solid #00cc33"><div style="-webkit-transform: scaleX(-0.5) translate(50px, -50px) rotate(-30deg); -webkit-transform-origin: 0% 0%;">This is a test</div></div>
+       <div style="border: 1px solid #009966"><div style="-webkit-transform: scaleX(-1.0) translate(50px, -50px) rotate(-30deg); -webkit-transform-origin: 0% 0%;">This is a test</div></div>
+       <div style="border: 1px solid blue"><div style="-webkit-transform: rotate(60deg);">This is a test</div></div>
+       <div style="border: 1px solid blue"><div style="-webkit-transform: rotate(90deg);">This is a test</div></div>
+       <div style="border: 1px solid blue"><div style="-webkit-transform: scale(1, -0.2) rotate(30deg);">This is a test</div></div>
+       <div style="border: 1px solid blue"><div style="-webkit-transform: scale(1.4, 0.6) ">This is a test</div></div>
+	</body>
+</html>

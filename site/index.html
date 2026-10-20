@@ -1,14 +1,12 @@
 <!DOCTYPE html>
 <html>
 	<head>
-	    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1">
+	    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 		<title>Katamari Hack</title>
 		<style type="text/css">
 			body {
 				font-family: sans-serif;
 				width: 700px;
-				max-width: calc(100% - 40px);
 				margin: 20px auto;
 			}
 			#footer {
@@ -24,20 +22,10 @@
             h2 {
                 margin-top: 30px;
             }
-            #tribute {
-                color: gray;
-                font-size: 80%;
-                margin-top: -10px;
-            }
-            #tribute a {
-                color: gray;
-            }
 		</style>
 	</head>
 	<body>
 	    <h1>Katamari Hack</h1>
-	    <p id="tribute">A tribute mirror of <a href="http://kathack.com/" target="_blank">kathack.com</a> (2011),
-	        served over https so the bookmarklet keeps working on today's web.</p>
 		<p>Drag this link to your bookmarks bar: 
 		   <a id="khlink" href="#" title="Katamari!">Katamari!</a>
 		</p>
@@ -45,12 +33,10 @@
         <p>
             <textarea id="khtext" rows="7" cols="70"></textarea>
         </p>
-        <p><b>Controls:</b> hold down the <b>right mouse button</b> and move the mouse, the ball rolls
-            toward the pointer. Release to let it coast. (You can pick left-click or touch in the popup
-            before pressing Start.)</p>
+        <p>(works best in chrome or firefox 4)</p>
 		<h2>What is this?</h2>
 		<p>This is a "bookmarklet" that turns any page into
-		    <a href="https://en.wikipedia.org/wiki/Katamari_Damacy" target="_blank">Katamari Damacy</a>.
+		    <a href="http://en.wikipedia.org/wiki/Katamari_Damacy" target="_blank">Katamari Damacy</a>.
             Try clicking the Katamari! link above.
 	    </p>
         <p>This was the winner of the 2011 Yahoo HackU contest at
@@ -68,7 +54,7 @@
                     elements can be found quickly (<code>StickyNodes::finalize</code>).
                     Essentially <code>grid[floor(x / 100)][floor(y / 100)]</code>
                     is a list of elements in a 100x100 pixel block.
-                    This should probably be an <a href="https://en.wikipedia.org/wiki/R-tree">R-tree</a>,
+                    This should probably be an <a href="http://en.wikipedia.org/wiki/R-tree">R-tree</a>,
                     but the hot-spot in this program is definitely in the rendering.</li>
                 <li>The ball and stripes are drawn in a canvas that gets moved
                     around the page (i.e. <code>position: absolute; left: x; top: y;</code>).
@@ -88,12 +74,13 @@
 		    Created by
 		    <a href="http://students.washington.edu/acleone/" target="_blank">Alex Leone</a>,
 		    David Nufer, and David Truong, March 2011.
-		    <br>Mirror source on <a href="https://github.com/gregsadetsky/kathack" target="_blank">github</a>.
+	    </div>
+		<div id="footer">
+		    Fixed up by <a href="https://greg.technology" target="_blank">Greg Technology</a> in 2026.
 	    </div>
 		<script type="text/javascript">
-		  /* build the bookmarklet from wherever this page is served, so it
-		     works on https pages (the original pointed at http:// urls, which
-		     browsers now block as mixed content). */
+		  /* bookmarklet urls point at wherever this page is served (https),
+		     the original hard-coded http:// urls get blocked as mixed content. */
 		  (function () {
 		    var base = location.origin + location.pathname.replace(/[^\/]*$/, ''),
 		        code = "javascript:var i,s,ss=['" + base + "js/kh.js','" + base + "js/jquery-1.5.1.min.js'];" +
